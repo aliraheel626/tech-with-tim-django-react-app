@@ -3,12 +3,32 @@ import api from "../api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import { useNavigate } from "react-router-dom";
 import "../styles/Form.css";
+import LoadingIndicator from "./LoadingIndicator";
+import { Link } from "react-router-dom";
 function Form({ route, method }) {
   console.log(method);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const DynamicLink = ({ method }) => {
+    const target = method === "login" ? "/register" : "/login";
+    const text =
+      method === "login"
+        ? "Don't have an account? Register"
+        : "Already have an account? Login";
+
+    return (
+      <p style={{ textAlign: "center", fontSize: "14px", marginTop: "20px" }}>
+        {/* {text}{" "} */}
+        <Link to={target} style={{ color: "#007BFF", textDecoration: "none" }}>
+          {text}
+        </Link>
+      </p>
+    );
+  };
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -55,9 +75,11 @@ function Form({ route, method }) {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
       />
+      {loading && <LoadingIndicator />}
       <button className="form-button" type="submit">
         {method === "login" ? "Login" : "Register"}
       </button>
+      <DynamicLink method={method} />
     </form>
   );
 }

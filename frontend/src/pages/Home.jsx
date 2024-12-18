@@ -2,7 +2,22 @@ import { useState, useEffect } from "react";
 import api from "../api";
 import Note from "../components/Note";
 import "../styles/Home.css";
+import { useNavigate } from "react-router-dom";
 
+const LogoutButton = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Add any logout logic here (e.g., clearing tokens, state)
+    navigate("/logout"); // Navigate to the logout page
+  };
+
+  return (
+    <button onClick={handleLogout} className="logout-button">
+      Logout
+    </button>
+  );
+};
 function Home() {
   const [notes, setNotes] = useState([]);
   const [content, setContent] = useState("");
@@ -51,9 +66,20 @@ function Home() {
   };
   return (
     <div>
-      <h2>Tasks</h2>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+          padding: "10px",
+        }}
+      >
+        <h2 style={{ margin: "0" }}>Tasks</h2>
+        <LogoutButton />
+      </div>
       {notes.map((note) => (
-        <Note note={note} onDelete={deleteNote} />
+        <Note note={note} onDelete={deleteNote} key={note.id} />
       ))}
       <form onSubmit={createNote}>
         <label htmlFor="title">Title:</label>
