@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("notes/", views.NoteListCreateView.as_view(), name="note-list"),
-    path("notes/<int:pk>/", views.NoteDeleteView.as_view(), name="delete-note"),]
+    path("notes/", views.NoteListCreate.as_view(), name="note-list"),
+    path("notes/<int:pk>/", views.NoteDelete.as_view(), name="delete-note"),
+]

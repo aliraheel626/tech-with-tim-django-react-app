@@ -15,6 +15,8 @@ function Form({ route, method }) {
 
     try {
       const res = await api.post(route, { username, password });
+      console.log("Response:", res.data); // Logs successful response data
+
       if (method === "login") {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
@@ -23,7 +25,14 @@ function Form({ route, method }) {
         navigate("/login");
       }
     } catch (e) {
-      alert(e);
+      // Log the error response
+      if (e.response) {
+        console.log("Error response body:", e.response.data); // Logs the response body
+        console.log("Error status code:", e.response.status); // Logs the status code
+      } else {
+        console.log("Unexpected error:", e); // Logs unexpected errors
+      }
+      alert(e.response?.data?.detail || "An error occurred.");
     } finally {
       setLoading(false);
     }
@@ -35,16 +44,16 @@ function Form({ route, method }) {
       <input
         className="form-input"
         type="text"
-        value="username"
-        onchange={(e) => setUsername(e.target.value)}
-        placeholder="username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Username"
       />
       <input
         className="form-input"
         type="text"
-        value="password"
-        onchange={(e) => setPassword(e.target.value)}
-        placeholder="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
       />
       <button className="form-button" type="submit">
         {method === "login" ? "Login" : "Register"}
